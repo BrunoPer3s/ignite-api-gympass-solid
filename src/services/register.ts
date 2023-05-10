@@ -1,3 +1,4 @@
+import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
 
 interface RegisterServiceParams {
@@ -7,14 +8,14 @@ interface RegisterServiceParams {
 }
 
 export class RegisterService {
-  private usersRepository: any
+  private usersRepository: UsersRepository
 
   constructor(usersRepository: any) {
     this.usersRepository = usersRepository
   }
 
   async execute({ email, name, password }: RegisterServiceParams) {
-    const userWithSameEmail = await this.usersRepository.checkEmail(email)
+    const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
     if (userWithSameEmail) {
       throw new Error('E-mail already exists!')
